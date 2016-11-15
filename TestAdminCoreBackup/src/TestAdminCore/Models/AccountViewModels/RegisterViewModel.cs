@@ -32,6 +32,37 @@ namespace TestAdminCore.Models.AccountViewModels
         [Required]
         [Display(Name = "LastName")]
    
+        
         public string LastName { get; set; }
+
+        [Required]
+        [Display(Name = "Address")]
+
+
+        public string Address { get; set; }
+
+        [Required]
+        [Display(Name = "Phone")]
+
+
+        public string Phone { get; set; }
+
+        [Required]
+        [Display(Name = "Zipcode")]
+
+
+        public string Zipcode { get; set; }
+
+        [Required]
+        [Display(Name = "MyProperty")]
+
+
+        public string Myproperty { get; set; }
+
+        [Required]
+        [Display(Name = "City")]
+
+
+        public string City { get; set; }
     }
 }
