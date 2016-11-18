@@ -10,9 +10,11 @@ using TestAdminCore.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using TestAdminCore.Models.AccountViewModels;
+using System.Security.Claims;
 
 namespace TestAdminCore.Controllers
 {
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -98,8 +100,9 @@ namespace TestAdminCore.Controllers
 
 
         // GET: Users/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit()
         {
+            var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (id == null)
             {
                 return NotFound();
@@ -118,9 +121,11 @@ namespace TestAdminCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,AccessFailedCount,Address,City,ConcurrencyStamp,Email,EmailConfirmed,FirstName,LastName,LockoutEnabled,LockoutEnd,MyProperty,NormalizedEmail,NormalizedUserName,PasswordHash,Phone,PhoneNumber,PhoneNumberConfirmed,SecurityStamp,TwoFactorEnabled,UserName,Zipcode")] ApplicationUser applicationUser)
+        public async Task<IActionResult> Edit([Bind("Id,AccessFailedCount,Address,City,ConcurrencyStamp,Email,EmailConfirmed,FirstName,LastName,LockoutEnabled,LockoutEnd,MyProperty,NormalizedEmail,NormalizedUserName,PasswordHash,Phone,PhoneNumber,PhoneNumberConfirmed,SecurityStamp,TwoFactorEnabled,UserName,Zipcode")] ApplicationUser applicationUser)
         {
-            if (id != applicationUser.Id)
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId != applicationUser.Id)
             {
                 return NotFound();
             }
