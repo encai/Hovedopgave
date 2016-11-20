@@ -85,7 +85,7 @@ namespace TestAdminCore.Controllers
                     //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                     //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
-
+                    IdentityResult result2 = await _userManager.AddToRoleAsync(user, "EMPLOYEE");
 
                     return RedirectToLocal(returnUrl);
                 }
