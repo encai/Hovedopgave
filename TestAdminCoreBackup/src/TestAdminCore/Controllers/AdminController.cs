@@ -7,31 +7,31 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TestAdminCore.Data;
 using TestAdminCore.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using TestAdminCore.Models.AccountViewModels;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TestAdminCore.Controllers
 {
-    [Authorize]
-    public class UsersController : Controller
+    [Authorize(Roles = "Administrator")]
+    public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        public UsersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+
+        public AdminController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
-        // GET: Users
+        // GET: Admin
         public async Task<IActionResult> Index()
         {
             return View(await _context.ApplicationUser.ToListAsync());
         }
 
-        // GET: Users/Details/5
+        // GET: Admin/Details/5
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -48,15 +48,15 @@ namespace TestAdminCore.Controllers
             return View(applicationUser);
         }
 
-        // GET: Users/Create
+        // GET: Admin/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        //// POST: Users/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Admin/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> Create([Bind("Id,AccessFailedCount,Address,City,ConcurrencyStamp,Email,EmailConfirmed,FirstName,LastName,LockoutEnabled,LockoutEnd,MyProperty,NormalizedEmail,NormalizedUserName,PasswordHash,Phone,PhoneNumber,PhoneNumberConfirmed,SecurityStamp,TwoFactorEnabled,UserName,Zipcode")] ApplicationUser applicationUser)
@@ -70,7 +70,6 @@ namespace TestAdminCore.Controllers
         //    return View(applicationUser);
         //}
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(RegisterViewModel model, string returnUrl = null)
         {
@@ -93,16 +92,14 @@ namespace TestAdminCore.Controllers
                 }
                 AddErrors(result);
             }
-
             // If we got this far, something failed, redisplay form
             return View(model);
         }
 
 
-        // GET: Users/Edit/5
-        public async Task<IActionResult> Edit()
+        // GET: Admin/Edit/5
+        public async Task<IActionResult> Edit(string id)
         {
-            var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (id == null)
             {
                 return NotFound();
@@ -116,16 +113,14 @@ namespace TestAdminCore.Controllers
             return View(applicationUser);
         }
 
-        // POST: Users/Edit/5
+        // POST: Admin/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([Bind("Id,AccessFailedCount,Address,City,ConcurrencyStamp,Email,EmailConfirmed,FirstName,LastName,LockoutEnabled,LockoutEnd,MyProperty,NormalizedEmail,NormalizedUserName,PasswordHash,Phone,PhoneNumber,PhoneNumberConfirmed,SecurityStamp,TwoFactorEnabled,UserName,Zipcode")] ApplicationUser applicationUser)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,AccessFailedCount,Address,City,ConcurrencyStamp,Email,EmailConfirmed,FirstName,LastName,LockoutEnabled,LockoutEnd,MyProperty,NormalizedEmail,NormalizedUserName,PasswordHash,Phone,PhoneNumber,PhoneNumberConfirmed,SecurityStamp,TwoFactorEnabled,UserName,Zipcode")] ApplicationUser applicationUser)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (userId != applicationUser.Id)
+            if (id != applicationUser.Id)
             {
                 return NotFound();
             }
@@ -153,7 +148,7 @@ namespace TestAdminCore.Controllers
             return View(applicationUser);
         }
 
-        // GET: Users/Delete/5
+        // GET: Admin/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -170,7 +165,7 @@ namespace TestAdminCore.Controllers
             return View(applicationUser);
         }
 
-        // POST: Users/Delete/5
+        // POST: Admin/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
@@ -194,7 +189,7 @@ namespace TestAdminCore.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                return RedirectToAction(nameof(AdminController.Index), "Admin");
             }
         }
         private void AddErrors(IdentityResult result)
