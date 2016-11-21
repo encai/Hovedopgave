@@ -26,7 +26,13 @@ namespace TestAdminCore.Data
                 ApplicationUser administrator = new ApplicationUser()
                 {
                     UserName = "admin@test.dk",
-                    Email = "admin@test.dk"
+                    Email = "admin@test.dk",
+                    FirstName = "Admin",
+                LastName = "Adminsen",
+                Phone = "12345678",
+                Address = "Adminvej 1",
+                Zipcode = "4000",
+                City = "Roskilde"
                 };
                 
 
@@ -42,7 +48,13 @@ namespace TestAdminCore.Data
                 ApplicationUser employee = new ApplicationUser()
                 {
                     UserName = "Employee@test.dk",
-                    Email = "Employee@test.dk"
+                    Email = "Employee@test.dk",
+                    FirstName = "Employee",
+                    LastName = "Something",
+                    Phone = "12345678",
+                    Address = "Plebvej 1",
+                    Zipcode = "4000",
+                    City = "Roskilde"
                 };
 
 
