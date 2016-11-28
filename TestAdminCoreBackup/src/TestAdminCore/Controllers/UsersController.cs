@@ -69,35 +69,6 @@ namespace TestAdminCore.Controllers
         //    }
         //    return View(applicationUser);
         //}
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(RegisterViewModel model, string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, Address = model.Address, Phone = model.Phone, City = model.City, Zipcode = model.Zipcode, MyProperty = model.Myproperty };
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
-                    // Send an email with this link
-                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
-                    //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
-                    IdentityResult result2 = await _userManager.AddToRoleAsync(user, "EMPLOYEE");
-
-                    return RedirectToLocal(returnUrl);
-                }
-                AddErrors(result);
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
 
         // GET: Users/Edit/5
         public async Task<IActionResult> Edit()
@@ -153,33 +124,6 @@ namespace TestAdminCore.Controllers
             return View(applicationUser);
         }
 
-        // GET: Users/Delete/5
-        public async Task<IActionResult> Delete(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var applicationUser = await _context.ApplicationUser.SingleOrDefaultAsync(m => m.Id == id);
-            if (applicationUser == null)
-            {
-                return NotFound();
-            }
-
-            return View(applicationUser);
-        }
-
-        // POST: Users/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var applicationUser = await _context.ApplicationUser.SingleOrDefaultAsync(m => m.Id == id);
-            _context.ApplicationUser.Remove(applicationUser);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
 
         private bool ApplicationUserExists(string id)
         {
