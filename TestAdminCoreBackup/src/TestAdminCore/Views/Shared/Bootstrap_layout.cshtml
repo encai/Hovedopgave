@@ -73,12 +73,13 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
                 <ul class="nav navbar-nav">
-
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Forside</a></li>
                     <li><a asp-area="" asp-controller="Admin" asp-action="Index">Adminpanel</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">Om Firmaet</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Kontakt</a></li>
 
                 </ul>
+                @await Html.PartialAsync("_LoginPartial")
 
             </div>
 
