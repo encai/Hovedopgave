@@ -1,4 +1,6 @@
 ﻿/// <autosync enabled="true" />
+/// <reference path="bootstrapthemes/js/bootstrap.js" />
+/// <reference path="bootstrapthemes/js/jquery.js" />
 /// <reference path="dist/Bootstrap/js/bootstrap.js" />
 /// <reference path="dist/Bootstrap/js/npm.js" />
 /// <reference path="dist/Js/app.js" />
