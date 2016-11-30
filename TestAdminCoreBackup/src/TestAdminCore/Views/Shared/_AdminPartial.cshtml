@@ -1,0 +1,15 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using TestAdminCore.Models
+
+@inject UserManager<ApplicationUser> UserManager
+
+
+@if (this.User.IsInRole("Administrator"))
+{
+    <li><a asp-area="" asp-controller="Admin" asp-action="Index">Adminpanel</a></li>
+
+}
+else
+{
+   
+}
