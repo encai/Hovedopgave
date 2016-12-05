@@ -1,0 +1,16 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using TestAdminCore.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@if (this.User.IsInRole("Employee"))
+{ 
+    <li><a asp-area="" asp-controller="Users" asp-action="Index">Medarbejder oversigt</a></li>
+
+}
+else
+{
+
+}
