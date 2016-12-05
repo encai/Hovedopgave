@@ -1,4 +1,4 @@
-﻿{
+{
   "userSecretsId": "aspnet-TestAdminCore-95e2bd5d-7c13-43e1-b2c7-7ada5de2b26d",
 
   "dependencies": {
@@ -43,8 +43,9 @@
     "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": {
       "version": "1.0.0-preview2-final",
       "type": "build"
-    }
-  },
+    },
+    "System.Linq": "4.3.0",
+    "Moq": "4.6.36-alpha"  },
 
   "tools": {
     "BundlerMinifier.Core": "2.0.238",
