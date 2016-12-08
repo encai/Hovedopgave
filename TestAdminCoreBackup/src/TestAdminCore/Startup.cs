@@ -43,7 +43,7 @@ namespace TestAdminCore
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDbContext<MyDBContext>(options => options.UseInMemoryDatabase());
+            services.AddDbContext<MyDBContext>(options => options.UseInMemoryDatabase()); //tilføjet dbcontext
 
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
