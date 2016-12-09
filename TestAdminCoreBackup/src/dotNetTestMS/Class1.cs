@@ -9,6 +9,8 @@ using TestAdminCore.Controllers;
 using TestAdminCore.Data.Migrations;
 using TestAdminCore.Models;
 using static TestAdminCore.Data.Migrations.MyDBContext;
+using Microsoft.AspNet.Mvc;
+using System.Linq;
 
 namespace dotNetTestMS
 {
@@ -53,6 +55,39 @@ namespace dotNetTestMS
             Person model = (Person)result.ViewData.Model;
             Assert.AreEqual("John", model.FirstName);
             Assert.AreEqual("Doe", model.LastName);
+        }
+
+        [TestMethod]
+        public void Get_non_existent_person_returns_null()
+        {
+            // Act
+            var result = _controller.GetPerson("Fred") as ViewResult;
+
+            // Assert
+            Assert.IsNull(result.ViewData.Model);
+        }
+
+        [TestMethod]
+        public void Add_person_saves_to_db_with_generated_id()
+        {
+            // Arrange
+            Guid personId = Guid.NewGuid();
+            Person person = new Person()
+            {
+                Id = personId,
+                FirstName = "Billy",
+                LastName = "McBill"
+            };
+            var beforePersonCount = _context.People.Count();
+            // Act
+            var result = _controller.AddPerson(person) as HttpStatusCodeResult;
+
+            // Assert
+           // Assert.AreEqual(200, result.StatusCode);
+            Person savedPerson = _context.People.Single(x => x.FirstName == "Billy" && x.LastName == "McBill");
+
+            Assert.AreNotEqual(personId, savedPerson.Id);
+            Assert.AreEqual(beforePersonCount +1 , _context.People.Count());
         }
 
         #region Standard Test
