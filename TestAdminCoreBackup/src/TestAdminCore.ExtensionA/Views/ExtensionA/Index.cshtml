@@ -1,0 +1,30 @@
+﻿<ul>
+    <li><<a asp-area="" asp-controller="ExtensionA" asp-action="Index">Forside</a>/li>
+    <li><<a asp-area="" asp-controller="ExtensionA" asp-action="Index">tilføj rolle</a>/li>
+    <li><<a asp-area="" asp-controller="ExtensionA" asp-action="Index">Fjern rolle</a>/li>
+</ul>
+<hr />
+
+<h3>Liste over roller</h3>
+<div>
+    @foreach (var role in Model)
+    {
+        <p>
+            <strong>@role.Name | </strong>
+        </p>
+    }
+</div>
+<hr />
+<h4>Hent en brugers roller</h4>
+@if (ViewBag.RolesForThisUser != null)
+{
+    <div style="background-color:yellow;">
+        <h3>Roles for this user </h3>
+        <ol>
+            @foreach (string s in ViewBag.RolesForThisUser)
+            {
+                <li>@s</li>
+            }
+        </ol>
+    </div>
+}

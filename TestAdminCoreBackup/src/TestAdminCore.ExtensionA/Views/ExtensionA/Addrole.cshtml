@@ -1,0 +1,22 @@
+﻿<ul>
+    <li><<a asp-area="" asp-controller="ExtensionA" asp-action="Index">Forside</a>/li>
+    <li><<a asp-area="" asp-controller="ExtensionA" asp-action="Index">tilføj rolle</a>/li>
+    <li><<a asp-area="" asp-controller="ExtensionA" asp-action="Index">Fjern rolle</a>/li>
+</ul>
+<hr />
+
+<h2>Tilføj til rolle</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <p>
+        Username : @Html.TextBox("UserName")
+        Role Name: @Html.DropDownList("RoleName", (IEnumerable<SelectListItem>)ViewBag.Roles, "Select ...")
+
+    </p>
+
+    <input type="submit" value="Save" />
+}

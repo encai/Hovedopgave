@@ -15,9 +15,11 @@ using TestAdminCore.Services;
 
 namespace TestAdminCore
 {
-    public class Startup
+    public class Startup : ExtCore.WebApplication.Startup
     {
-        public Startup(IHostingEnvironment env)
+        //Base og serviceprovider er fra extcore
+        public Startup(IHostingEnvironment env, IServiceProvider ServiceProvider)
+            : base(ServiceProvider)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -32,13 +34,20 @@ namespace TestAdminCore
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            //Fra extCore
+            this.configurationRoot = builder.Build();
         }
 
         public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        //sat override ind for at extcore virker
+        public override void ConfigureServices(IServiceCollection services)
         {
+            //tilføjet fra extcore
+            base.ConfigureServices(services);
+
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -56,12 +65,26 @@ namespace TestAdminCore
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, AdministratorSeedData seeder)
+
+        /*
+         * Originalt var linien
+          public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, AdministratorSeedData seeder) 
+         * 
+         */
+
+            //sat override ind for at extcore virker
+        public override void Configure(IApplicationBuilder app)
         {
+            /*
+             * Originalt 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+             
+             */
+            this.serviceProvider.GetService<ILoggerFactory>().AddConsole(Configuration.GetSection("logging"));
+            this.serviceProvider.GetService<ILoggerFactory>().AddDebug();
 
-            if (env.IsDevelopment())
+            if (this.serviceProvider.GetService<IHostingEnvironment>().IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
@@ -84,7 +107,8 @@ namespace TestAdminCore
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-           await seeder.EnsureSeedDataAsync();
+            base.Configure(app);
+           
         }
     }
 }
