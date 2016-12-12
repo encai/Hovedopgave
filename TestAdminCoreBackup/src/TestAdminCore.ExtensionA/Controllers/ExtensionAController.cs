@@ -40,6 +40,7 @@ namespace TestAdminCore.ExtensionA.Controllers
              ViewBag.Roles = listen;
 
             var roles = _Context.Roles.ToList();
+            _Context.SaveChangesAsync();
             return View(roles);
         }
 
@@ -47,6 +48,7 @@ namespace TestAdminCore.ExtensionA.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Index(string Username)
         {
+            
             if (!string.IsNullOrWhiteSpace(Username))
             {
                 ApplicationUser user = _Context.Users.Where(u => u.UserName.Equals(Username, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
@@ -55,7 +57,9 @@ namespace TestAdminCore.ExtensionA.Controllers
                 var listen = test.ToString().ToList().Distinct();
 
                 ViewBag.RolesForThisUser = test.Result;
+                _Context.SaveChangesAsync();
             }
+        
             return View();
         }
 
@@ -66,6 +70,7 @@ namespace TestAdminCore.ExtensionA.Controllers
             var list = _Context.Roles.OrderBy(r => r.Name).ToList().Select(rr =>
         new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
             ViewBag.Roles = list;
+            _Context.SaveChangesAsync();
             return this.View();
         }
           [Authorize(Roles = "Editor")]
@@ -73,15 +78,25 @@ namespace TestAdminCore.ExtensionA.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Addrole(string UserName, string RoleName)
         {
-            ApplicationUser user = _Context.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+            try
+            {
+                ApplicationUser user = _Context.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
 
-            _userManager.AddToRoleAsync(user, RoleName);
+                _userManager.AddToRoleAsync(user, RoleName);
 
-            ViewBag.ResultMessage = "Role created successfully !";
+                ViewBag.ResultMessage = UserName + " blev tilføjet til rollen" + RoleName;
+            }
+            catch
+            {
+                ViewBag.ResultMessage = "der skete en fejl";
+            }
+            
+            
 
             // prepopulat roles for the view dropdown
             var list = _Context.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
             ViewBag.Roles = list;
+            _Context.SaveChangesAsync();
 
             return View();
         }
@@ -92,6 +107,7 @@ namespace TestAdminCore.ExtensionA.Controllers
             var list = _Context.Roles.OrderBy(r => r.Name).ToList().Select(rr =>
            new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
             ViewBag.Roles = list;
+            _Context.SaveChangesAsync();
             return this.View();
         }
 
@@ -100,12 +116,9 @@ namespace TestAdminCore.ExtensionA.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Removerole(string UserName, string RoleName)
         {
-
-            ApplicationUser user = _Context.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
-
-
             try
             {
+                ApplicationUser user = _Context.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
                 _userManager.RemoveFromRoleAsync(user, RoleName);
                 ViewBag.ResultMessage = UserName + " er fjernet fra rollen " + RoleName;
             }
@@ -116,6 +129,7 @@ namespace TestAdminCore.ExtensionA.Controllers
             // prepopulat roles for the view dropdown
             var list = _Context.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
             ViewBag.Roles = list;
+            _Context.SaveChangesAsync();
 
             return View();
         }

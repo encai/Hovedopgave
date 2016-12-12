@@ -10,19 +10,25 @@ using TestAdminCore.Models;
 using Microsoft.AspNetCore.Identity;
 using TestAdminCore.Models.AccountViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
+using System.IO;
 
 namespace TestAdminCore.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    //[Authorize(Roles = "Administrator")]
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IHostingEnvironment _environment;
 
-        public AdminController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public AdminController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IHostingEnvironment environment)
         {
             _context = context;
             _userManager = userManager;
+            _environment = environment;
         }
 
         // GET: Admin
@@ -199,5 +205,40 @@ namespace TestAdminCore.Controllers
                 ModelState.AddModelError(string.Empty, error.Description);
             }
         }
+
+
+        public IActionResult Upload()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> upload(ICollection<IFormFile> files)
+        {
+            try
+            {
+                var uploads = Path.Combine(_environment.WebRootPath, "Test");
+                foreach (var file in files)
+                {
+                    if (file.Length > 0)
+                    {
+                        using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
+                        {
+                            await file.CopyToAsync(fileStream);
+                        }
+                    }
+                }
+
+                ViewBag.Message = "File uploaded successfully";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = string.Format("Error: {0}", ex.Message);
+            }
+
+            return View();
+            
+        }
+
     }
 }
