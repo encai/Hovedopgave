@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace TestAdminCore.ExtensionA.Controllers
 {
-  
+  [Authorize]
     public class ExtensionAController : Controller
   {
         private readonly ApplicationDbContext _Context;
@@ -60,12 +60,15 @@ namespace TestAdminCore.ExtensionA.Controllers
         }
 
         //tilføj en rolle til en bruger.
-      //  [Authorize(Roles = "Editor")]
+        [Authorize(Roles = "Editor")]
         public ActionResult Addrole()
         {
+            var list = _Context.Roles.OrderBy(r => r.Name).ToList().Select(rr =>
+        new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
+            ViewBag.Roles = list;
             return this.View();
         }
-        //  [Authorize(Roles = "Editor")]
+          [Authorize(Roles = "Editor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Addrole(string UserName, string RoleName)
@@ -83,13 +86,16 @@ namespace TestAdminCore.ExtensionA.Controllers
             return View();
         }
         //fjern en rolle fra en bruger
-       // [Authorize(Roles = "Editor")]
+       [Authorize(Roles = "Editor")]
         public ActionResult Removerole()
         {
+            var list = _Context.Roles.OrderBy(r => r.Name).ToList().Select(rr =>
+           new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
+            ViewBag.Roles = list;
             return this.View();
         }
 
-       // [Authorize( Roles = "Editor")]
+        [Authorize( Roles = "Editor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Removerole(string UserName, string RoleName)
