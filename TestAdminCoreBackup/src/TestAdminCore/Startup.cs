@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using TestAdminCore.Data;
 using TestAdminCore.Models;
 using TestAdminCore.Services;
+using TestAdminCore.Data.Migrations;
 
 namespace TestAdminCore
 {
@@ -42,10 +43,13 @@ namespace TestAdminCore
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<MyDBContext>(options => options.UseInMemoryDatabase()); //tilføjet dbcontext
+
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
 
             services.AddMvc();
 
