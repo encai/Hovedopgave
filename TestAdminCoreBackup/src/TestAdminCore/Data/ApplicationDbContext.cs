@@ -30,6 +30,8 @@ namespace TestAdminCore.Data
 
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
+        public DbSet<plugin> plugin { get; set; }
+
        
     }
 }
