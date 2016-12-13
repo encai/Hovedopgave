@@ -31,58 +31,68 @@ namespace TestAdminCore.ExtensionA.Controllers
         //kan søge på en brugers rolle samt giver en liste over mulige roller
         public ActionResult Index()
     {
+            /*
             var list = _Context.Roles.OrderBy(r => r.Name).ToList().Select(rr =>
         new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
             ViewBag.Roles = list;
 
-            // prepopulat roles for the view dropdown
-             var listen = _Context.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
-             ViewBag.Roles = listen;
-
             var roles = _Context.Roles.ToList();
-            _Context.SaveChangesAsync();
             return View(roles);
+            */
+
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(string Username)
+        public ActionResult Index(string UserName)
         {
             
-            if (!string.IsNullOrWhiteSpace(Username))
+            if (!string.IsNullOrWhiteSpace(UserName))
             {
-                ApplicationUser user = _Context.Users.Where(u => u.UserName.Equals(Username, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+                ApplicationUser user = _Context.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+               
+                    Task<IList<string>> test = _userManager.GetRolesAsync(user);
+                    var listen = test.ToString().ToList().Distinct();
 
-                Task<IList<string>> test = _userManager.GetRolesAsync(user);
-                var listen = test.ToString().ToList().Distinct();
-
-                ViewBag.RolesForThisUser = test.Result;
-                _Context.SaveChangesAsync();
+                    ViewBag.RolesForThisUser = test.Result; 
             }
         
             return View();
         }
 
-        //tilføj en rolle til en bruger.
-        [Authorize(Roles = "Editor")]
-        public ActionResult Addrole()
+        public ActionResult Roles()
         {
             var list = _Context.Roles.OrderBy(r => r.Name).ToList().Select(rr =>
         new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
             ViewBag.Roles = list;
-            _Context.SaveChangesAsync();
+
+            var roles = _Context.Roles.ToList();
+            return View(roles);
+        }
+
+        //tilføj en rolle til en bruger.
+        // [Authorize(Roles = "Editor")]
+        public ActionResult Addrole()
+        {
             return this.View();
         }
-          [Authorize(Roles = "Editor")]
+        //  [Authorize(Roles = "Editor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Addrole(string UserName, string RoleName)
+        public async Task<ActionResult> Addrole(string UserName, string RoleName)
         {
+            /*   var result = _userManager.IsInRoleAsync(user, RoleName);
+               if (result.ToString() == "true")
+               {*/
+
             try
             {
                 ApplicationUser user = _Context.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+   
+                await _userManager.AddToRoleAsync(user, RoleName);
 
-                _userManager.AddToRoleAsync(user, RoleName);
+
 
                 ViewBag.ResultMessage = UserName + " blev tilføjet til rollen" + RoleName;
             }
@@ -90,46 +100,55 @@ namespace TestAdminCore.ExtensionA.Controllers
             {
                 ViewBag.ResultMessage = "der skete en fejl";
             }
-            
-            
 
-            // prepopulat roles for the view dropdown
-            var list = _Context.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
-            ViewBag.Roles = list;
-            _Context.SaveChangesAsync();
 
             return View();
         }
         //fjern en rolle fra en bruger
-       [Authorize(Roles = "Editor")]
+        //  [Authorize(Roles = "Editor")]
         public ActionResult Removerole()
         {
-            var list = _Context.Roles.OrderBy(r => r.Name).ToList().Select(rr =>
-           new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
-            ViewBag.Roles = list;
-            _Context.SaveChangesAsync();
-            return this.View();
+          
+            return View();
         }
 
-        [Authorize( Roles = "Editor")]
+       // [Authorize( Roles = "Editor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Removerole(string UserName, string RoleName)
+        public  ActionResult Removerole(string UserName, string RoleName)
         {
-            try
+            ApplicationUser user = _Context.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+            
+            var result = _userManager.IsInRoleAsync(user, RoleName);
+            if (result.ToString() == "true")
             {
-                ApplicationUser user = _Context.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+                ViewBag.ResultMessage = "Brugeren er ikke i rollen " + UserName + " fra rollen  " + RoleName;
+            }
+            else
+            {
                 _userManager.RemoveFromRoleAsync(user, RoleName);
                 ViewBag.ResultMessage = UserName + " er fjernet fra rollen " + RoleName;
+                
             }
-            catch
-            {
-                ViewBag.ResultMessage = "Der skete en fejl med at fjerne " + UserName + " fra rollen  " + RoleName;
-            }
+                
+            
+            //try
+            //{
+               
+            //    _userManager.RemoveFromRoleAsync(user, RoleName);
+            //    ViewBag.ResultMessage = UserName + " er fjernet fra rollen " + RoleName;
+            //    var list = _Context.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
+            //    ViewBag.Roles = list;
+            //}
+            //catch
+            //{
+            //    ViewBag.ResultMessage = "Der skete en fejl med at fjerne " + UserName + " fra rollen  " + RoleName;
+            //}
+           
+                //var list = _Context.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
+                //ViewBag.Roles = list;
+            
             // prepopulat roles for the view dropdown
-            var list = _Context.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
-            ViewBag.Roles = list;
-            _Context.SaveChangesAsync();
 
             return View();
         }

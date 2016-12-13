@@ -1,9 +1,11 @@
-﻿<ul>
-    <li><a href="/extensions/userrole/">Start</a></li>
-    <li><a href="/extensions/userrole/addrole">tilføj rolle</a></li>
-    <li><a href="/extensions/userrole/removerole">Fjern rolle</a></li>
-</ul>
-<hr />
+﻿<div>
+    <ul>
+        <li><a href="/extensions/userrole/">Start</a></li>
+        <li><a href="/extensions/userrole/addrole">tilføj rolle</a></li>
+        <li><a href="/extensions/userrole/removerole">Fjern rolle</a></li>
+        <li><a href="/extensions/userrole/roles">Liste over roller</a></li>
+    </ul>
+</div>
 
 <h3>Slet en bruger fra en rolle</h3>
 
@@ -14,7 +16,7 @@
 
     <p>
         Username : @Html.TextBox("UserName")
-        Role Name: @Html.DropDownList("RoleName", (IEnumerable<SelectListItem>)ViewBag.Roles, "Select ...")
+        Rolle : @Html.TextBox("RoleName")
 
 
     </p>

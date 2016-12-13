@@ -5,15 +5,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TestAdminCore.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace TestAdminCore.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+            
         }
+  
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -24,5 +29,7 @@ namespace TestAdminCore.Data
         }
 
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
+
+       
     }
 }

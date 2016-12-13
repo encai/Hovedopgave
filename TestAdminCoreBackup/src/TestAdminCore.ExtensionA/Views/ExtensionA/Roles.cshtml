@@ -7,18 +7,12 @@
     </ul>
 </div>
 
-<h2>Tilføj til rolle</h2>
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
-
-    <p>
-        Username : @Html.TextBox("UserName")
-        Rolle : @Html.TextBox("RoleName")
-
-    </p>
-
-    <input type="submit" value="Save" />
-}
+<h3>Liste over roller</h3>
+<div>
+    @foreach (var role in Model)
+    {
+        <p>
+            <strong>@role.Name | </strong>
+        </p>
+    }
+</div>
