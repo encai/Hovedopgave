@@ -27,26 +27,17 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>                 
                 </button>
-<<<<<<< HEAD
-                <a href="#" class="pull-left"><img src="~/Pictures/EASJlogo.png"></a> 
+                <a href="/" class="pull-left"><img src="~/Pictures/EASJlogo.png"></a> 
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Forside</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">Om Firmaet</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Kontakt</a></li>
-                    @await Html.PartialAsync("_AdminPartial")
-                    @await Html.PartialAsync("_EmployeePartial")
-=======
-                <a href="/" class="navbar-brand">TestAdminCore</a>
-            </div>
+
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="/admin">Adminpanel</a></li>
                     <li><a href="/home/about">About</a></li>
                     <li><a href="/home/contact">Contact</a></li>
                     <li><a href="/plugins/">Plugins</a></li>
->>>>>>> refs/remotes/origin/Plugin
+                    @await Html.PartialAsync("_AdminPartial")
+                    @await Html.PartialAsync("_EmployeePartial")
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>

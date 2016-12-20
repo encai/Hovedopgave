@@ -12,11 +12,8 @@ using Microsoft.Extensions.Logging;
 using TestAdminCore.Data;
 using TestAdminCore.Models;
 using TestAdminCore.Services;
-<<<<<<< HEAD
 using TestAdminCore.Data.Migrations;
-=======
 using Microsoft.AspNetCore.Identity;
->>>>>>> refs/remotes/origin/Plugin
 
 namespace TestAdminCore
 {

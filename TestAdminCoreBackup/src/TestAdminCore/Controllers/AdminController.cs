@@ -17,7 +17,7 @@ using System.IO;
 
 namespace TestAdminCore.Controllers
 {
-    //[Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Administrator")]
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;

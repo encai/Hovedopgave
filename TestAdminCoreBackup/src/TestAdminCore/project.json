@@ -50,7 +50,6 @@
     "System.Linq": "4.3.0",
     "Moq": "4.6.36-alpha",
     "MSTest.TestFramework": "1.0.7-preview",
-    "dotnet-test-mstest": "1.1.2-preview",
     "Microsoft.EntityFrameworkCore.InMemory": "1.0.1"  },
 
   "tools": {
