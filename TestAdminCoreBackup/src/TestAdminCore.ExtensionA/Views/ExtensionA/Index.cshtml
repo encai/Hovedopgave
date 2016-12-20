@@ -1,0 +1,29 @@
+﻿<div>
+    <ul>
+        <li><a href="/extensions/userrole/">Start</a></li>
+        <li><a href="/extensions/userrole/addrole">tilføj rolle</a></li>
+        <li><a href="/extensions/userrole/removerole">Fjern rolle</a></li>
+        <li><a href="/extensions/userrole/roles">Liste over roller</a></li>
+    </ul>
+</div>
+<h4>Hent en brugers roller</h4>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <p>
+        Username : @Html.TextBox("UserName")
+        <input type="submit" />
+    </p>
+}
+@if (ViewBag.RolesForThisUser != null)
+{
+    <div>
+        <h3>Roles for this user </h3>
+        <ol>
+            @foreach (string s in ViewBag.RolesForThisUser)
+            {
+                <li>@s</li>
+            }
+        </ol>
+    </div>
+}
