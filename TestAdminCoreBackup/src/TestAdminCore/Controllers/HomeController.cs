@@ -49,7 +49,7 @@ namespace TestAdminCore.Controllers
 
             return View();
         }
-        [Authorize(Roles = "Administrator")]
+
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
