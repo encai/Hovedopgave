@@ -47,16 +47,24 @@ namespace TestAdminCore.ExtensionA.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Index(string UserName)
         {
-            
-            if (!string.IsNullOrWhiteSpace(UserName))
+            try
             {
-                ApplicationUser user = _Context.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
-               
+                if (!string.IsNullOrWhiteSpace(UserName))
+                {
+                    ApplicationUser user = _Context.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+
                     Task<IList<string>> test = _userManager.GetRolesAsync(user);
                     var listen = test.ToString().ToList().Distinct();
 
-                    ViewBag.RolesForThisUser = test.Result; 
+                    ViewBag.RolesForThisUser = test.Result;
+                }
             }
+            catch
+            {
+                ViewBag.ResultMessage = "der skete en fejl";
+            }
+            
+
         
             return View();
         }
@@ -112,13 +120,13 @@ namespace TestAdminCore.ExtensionA.Controllers
             return View();
         }
 
-       // [Authorize( Roles = "Editor")]
+        // [Authorize( Roles = "Editor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public  ActionResult Removerole(string UserName, string RoleName)
+        public async Task<ActionResult> Removerole(string UserName, string RoleName)
         {
             ApplicationUser user = _Context.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
-            
+
             var result = _userManager.IsInRoleAsync(user, RoleName);
             if (result.ToString() == "true")
             {
@@ -126,15 +134,15 @@ namespace TestAdminCore.ExtensionA.Controllers
             }
             else
             {
-                _userManager.RemoveFromRoleAsync(user, RoleName);
+                await _userManager.RemoveFromRoleAsync(user, RoleName);
                 ViewBag.ResultMessage = UserName + " er fjernet fra rollen " + RoleName;
-                
+
             }
-                
-            
+
+
             //try
             //{
-               
+
             //    _userManager.RemoveFromRoleAsync(user, RoleName);
             //    ViewBag.ResultMessage = UserName + " er fjernet fra rollen " + RoleName;
             //    var list = _Context.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
@@ -144,10 +152,10 @@ namespace TestAdminCore.ExtensionA.Controllers
             //{
             //    ViewBag.ResultMessage = "Der skete en fejl med at fjerne " + UserName + " fra rollen  " + RoleName;
             //}
-           
-                //var list = _Context.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
-                //ViewBag.Roles = list;
-            
+
+            //var list = _Context.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
+            //ViewBag.Roles = list;
+
             // prepopulat roles for the view dropdown
 
             return View();
